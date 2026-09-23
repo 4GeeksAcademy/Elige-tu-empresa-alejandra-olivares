@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reservas Brasaland</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        background-image: radial-gradient(circle at top, rgba(245, 158, 11, 0.18), transparent 32%),
+          linear-gradient(135deg, #1c1917 0%, #0c0a09 100%);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-stone-950 text-white antialiased">
+    <header class="border-b border-white/10 bg-stone-950/80 backdrop-blur-md">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <a href="index.html" class="flex items-center gap-3" aria-label="Volver a Brasaland">
+          <img src="imagenes/logo brasalad.png" alt="Logo de Brasaland" class="h-10 w-auto" />
+          <span class="text-lg font-black tracking-wide text-white">Brasaland</span>
+        </a>
+
+        <a href="index.html" class="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10">
+          Volver al inicio
+        </a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+      <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <aside class="order-2 rounded-[1.75rem] border border-amber-400/20 bg-gradient-to-br from-amber-500/10 via-stone-900 to-red-950 p-6 shadow-2xl shadow-black/20 sm:p-8 lg:order-1">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-300">Reserva</p>
+          <h1 class="mt-4 text-3xl font-black text-white sm:text-4xl">Haz tu reserva en Brasaland</h1>
+          <p class="mt-4 text-sm leading-7 text-stone-300 sm:text-base">
+            Disfruta de una experiencia gastronómica memorable con la mejor parrilla, ambiente cálido y atención personalizada.
+          </p>
+
+          <div class="mt-8 space-y-4">
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-amber-300">Horario</p>
+              <p class="mt-2 text-base font-semibold text-white">Lunes a domingo</p>
+              <p class="text-sm text-stone-300">12:00 PM - 11:00 PM</p>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-amber-300">Ubicación</p>
+              <p class="mt-2 text-base font-semibold text-white">Bogotá, Colombia</p>
+              <p class="text-sm text-stone-300">Calle 80 # 15-20</p>
+            </div>
+
+            <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-amber-300">Contacto</p>
+              <p class="mt-2 text-base font-semibold text-white">hola@brasaland.com</p>
+              <p class="text-sm text-stone-300">+57 300 123 4567</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="order-1 rounded-[1.75rem] border border-white/10 bg-white/5 p-5 shadow-2xl shadow-black/20 sm:p-8 lg:order-2">
+          <div class="mb-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-amber-300">Formulario</p>
+            <h2 class="mt-3 text-2xl font-black text-white sm:text-3xl">Detalles de la reserva</h2>
+          </div>
+
+          <form class="space-y-6 md:space-y-8" action="#" method="post">
+            <fieldset class="space-y-5 border-0 p-0">
+              <legend class="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300 sm:text-sm">Datos personales</legend>
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="nombre" class="block text-sm font-medium text-stone-200">Nombre</label>
+                  <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="apellido" class="block text-sm font-medium text-stone-200">Apellido</label>
+                  <input id="apellido" name="apellido" type="text" placeholder="Tu apellido" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="email" class="block text-sm font-medium text-stone-200">Correo electrónico</label>
+                  <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="correo@ejemplo.com" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="telefono" class="block text-sm font-medium text-stone-200">Teléfono</label>
+                  <input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="+57 300 123 4567" pattern="[0-9+()\s-]{8,20}" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-5 border-0 p-0">
+              <legend class="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300 sm:text-sm">Detalles de la reserva</legend>
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="space-y-2">
+                  <label for="fecha" class="block text-sm font-medium text-stone-200">Fecha</label>
+                  <input id="fecha" name="fecha" type="date" min="2026-09-23" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="hora" class="block text-sm font-medium text-stone-200">Hora</label>
+                  <input id="hora" name="hora" type="time" min="12:00" max="23:00" step="1800" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+
+                <div class="space-y-2">
+                  <label for="personas" class="block text-sm font-medium text-stone-200">N. de personas</label>
+                  <input id="personas" name="personas" type="number" min="1" max="20" step="1" placeholder="2" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div class="space-y-2">
+                  <label for="ambiente" class="block text-sm font-medium text-stone-200">Ambiente</label>
+                  <select id="ambiente" name="ambiente" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required>
+                    <option value="" selected disabled>Selecciona una opción</option>
+                    <option value="interior">Interior</option>
+                    <option value="terraza">Terraza</option>
+                    <option value="privado">Sala privada</option>
+                    <option value="preferencia">Sin preferencia</option>
+                  </select>
+                </div>
+
+                <div class="space-y-2">
+                  <label for="evento" class="block text-sm font-medium text-stone-200">Tipo de evento</label>
+                  <select id="evento" name="evento" class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required>
+                    <option value="" selected disabled>Selecciona una opción</option>
+                    <option value="cena">Cena</option>
+                    <option value="cumpleanos">Cumpleaños</option>
+                    <option value="reunion">Reunión familiar</option>
+                    <option value="empresa">Evento empresarial</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="space-y-4 border-0 p-0">
+              <legend class="mb-4 text-xs font-semibold uppercase tracking-[0.28em] text-amber-300 sm:text-sm">Información adicional</legend>
+              <div class="space-y-2">
+                <label for="comentarios" class="block text-sm font-medium text-stone-200">Comentarios adicionales</label>
+                <textarea id="comentarios" name="comentarios" rows="5" placeholder="Cuéntanos si tienes alguna preferencia, ocasión especial o requerimientos adicionales..." class="w-full rounded-xl border border-white/10 bg-stone-900/80 px-4 py-3 text-sm text-white placeholder:text-stone-400 transition duration-200 ease-in-out hover:border-white/20 focus:border-amber-400 focus:outline-none focus:ring-4 focus:ring-amber-500/20 focus:bg-stone-950" required></textarea>
+              </div>
+
+              <div class="flex flex-col gap-4 rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <label for="terminos" class="flex items-start gap-3 text-sm text-stone-200">
+                  <input id="terminos" type="checkbox" name="terminos" class="mt-1 h-4 w-4 rounded border-white/30 bg-stone-900 text-amber-500 transition duration-200 focus:ring-amber-500" required />
+                  <span>Acepto que Brasaland contacte conmigo para confirmar la reserva.</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="flex flex-col gap-3 pt-2 sm:flex-row sm:justify-end">
+              <button type="reset" class="inline-flex w-full items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-white/10 hover:border-white/25 sm:w-auto">
+                Limpiar
+              </button>
+              <button type="submit" class="inline-flex w-full items-center justify-center rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-stone-950 shadow-lg shadow-amber-500/20 transition duration-200 hover:bg-amber-400 hover:shadow-amber-400/30 sm:w-auto">
+                Enviar reserva
+              </button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+    <script src="scripts/validation.js"></script>
+  </body>
+</html>
