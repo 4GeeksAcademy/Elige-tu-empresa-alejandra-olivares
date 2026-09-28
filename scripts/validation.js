@@ -9,12 +9,14 @@ if (form) {
       !['submit', 'reset', 'button'].includes(field.type)
   );
 
+  const originalClasses = new Map(fields.map((field) => [field, field.className]));
+
   const getMessageNode = (field) => {
     let messageNode = field.parentElement.querySelector('.validation-message');
 
     if (!messageNode) {
       messageNode = document.createElement('small');
-      messageNode.className = 'validation-message mt-2 flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-200 shadow-sm';
+      messageNode.className = 'validation-message error-message mt-2 flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-200 shadow-sm';
       messageNode.setAttribute('aria-live', 'polite');
       field.parentElement.appendChild(messageNode);
     }
@@ -26,19 +28,19 @@ if (form) {
     const messageNode = getMessageNode(field);
 
     field.setAttribute('aria-invalid', String(!isValid));
-    field.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20');
-    field.classList.remove('border-emerald-400', 'focus:border-emerald-400', 'focus:ring-emerald-500/20');
+    field.classList.remove('border-white/10', 'border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20', 'bg-red-950/20');
+    field.classList.remove('border-emerald-400', 'focus:border-emerald-400', 'focus:ring-emerald-500/20', 'bg-emerald-950/10');
 
     if (!isValid) {
       field.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500/20', 'bg-red-950/20');
       messageNode.classList.remove('hidden');
-      messageNode.className = 'validation-message mt-2 flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-200 shadow-sm';
+      messageNode.className = 'validation-message error-message mt-2 flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-2.5 py-1.5 text-xs font-medium text-red-200 shadow-sm';
       messageNode.textContent = field.dataset.errorMessage || 'Este campo es obligatorio.';
       return;
     }
 
     field.classList.add('border-emerald-400', 'focus:border-emerald-400', 'focus:ring-emerald-500/20', 'bg-emerald-950/10');
-    messageNode.className = 'validation-message mt-2 flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium text-emerald-200 shadow-sm';
+    messageNode.className = 'validation-message error-message mt-2 flex items-center gap-2 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-2.5 py-1.5 text-xs font-medium text-emerald-200 shadow-sm';
     messageNode.textContent = field.dataset.successMessage || '✔ Correcto';
     messageNode.classList.remove('hidden');
   };
@@ -47,6 +49,64 @@ if (form) {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   const isValidPhone = (value) => /^[0-9+()\s-]{8,20}$/.test(value);
+
+  // Converts values to a common unit: number -> units, date -> days, time -> seconds.
+  const toComparable = (type, raw) => {
+    if (type === 'number') return Number(raw);
+    if (type === 'date') return Date.parse(`${raw}T00:00:00Z`) / 86400000;
+    if (type === 'time') {
+      const [h, m, s = '0'] = raw.split(':');
+      return Number(h) * 3600 + Number(m) * 60 + Number(s);
+    }
+    return NaN;
+  };
+
+  const defaultSteps = { number: 1, date: 1, time: 60 };
+
+  const describeStep = (type, step) => {
+    if (type === 'date') return `intervalos de ${step} día(s)`;
+    if (type === 'time') {
+      return step % 60 === 0 ? `intervalos de ${step / 60} minuto(s)` : `intervalos de ${step} segundo(s)`;
+    }
+    return `múltiplos de ${step}`;
+  };
+
+  // Returns an error message, or null when min/max/step are satisfied.
+  const checkRangeAndStep = (field, value) => {
+    const { type } = field;
+    const current = toComparable(type, value);
+    if (Number.isNaN(current)) return 'Ingresa un valor válido.';
+
+    const minAttr = field.getAttribute('min');
+    const maxAttr = field.getAttribute('max');
+    const min = minAttr ? toComparable(type, minAttr) : NaN;
+    const max = maxAttr ? toComparable(type, maxAttr) : NaN;
+
+    if (!Number.isNaN(min) && current < min) {
+      return type === 'number'
+        ? `El valor debe ser mayor o igual a ${minAttr}.`
+        : `El valor debe ser igual o posterior a ${minAttr}.`;
+    }
+
+    if (!Number.isNaN(max) && current > max) {
+      return type === 'number'
+        ? `El valor debe ser menor o igual a ${maxAttr}.`
+        : `El valor debe ser igual o anterior a ${maxAttr}.`;
+    }
+
+    const stepAttr = field.getAttribute('step');
+    if (stepAttr === 'any') return null;
+
+    const step = stepAttr && Number(stepAttr) > 0 ? Number(stepAttr) : defaultSteps[type];
+    const base = Number.isNaN(min) ? 0 : min;
+    const remainder = Math.abs((current - base) / step - Math.round((current - base) / step));
+
+    if (remainder > 1e-9) {
+      return `El valor debe ir en ${describeStep(type, step)}${minAttr ? ` a partir de ${minAttr}` : ''}.`;
+    }
+
+    return null;
+  };
 
   const validateField = (field) => {
     const value = field.type === 'checkbox' ? field.checked : field.value.trim();
@@ -132,15 +192,23 @@ if (form) {
     }
 
     if (field.type === 'number') {
-      const numericValue = Number(value);
-      if (Number.isNaN(numericValue) || numericValue < 1 || numericValue > 20) {
-        field.dataset.errorMessage = 'Ingresa un número entre 1 y 20.';
+      if (!value || Number.isNaN(Number(value))) {
+        field.dataset.errorMessage = 'Ingresa un número válido.';
         field.dataset.successMessage = 'Cantidad válida.';
         setFieldState(field, false);
         return false;
       }
 
       field.dataset.successMessage = 'Cantidad válida.';
+    }
+
+    if (['number', 'date', 'time'].includes(field.type) && value) {
+      const rangeError = checkRangeAndStep(field, value);
+      if (rangeError) {
+        field.dataset.errorMessage = rangeError;
+        setFieldState(field, false);
+        return false;
+      }
     }
 
     if (field.name === 'ambiente' && !value) {
@@ -241,23 +309,15 @@ if (form) {
   });
 
   form.addEventListener('reset', () => {
+    // Defer so cleanup runs after the browser restores default values.
     setTimeout(() => {
-      fields.forEach((field) => {
-        field.classList.remove(
-          'border-red-500',
-          'focus:border-red-500',
-          'focus:ring-red-500/20',
-          'border-emerald-400',
-          'focus:border-emerald-400',
-          'focus:ring-emerald-500/20'
-        );
-        field.setAttribute('aria-invalid', 'false');
+      form.querySelectorAll('.error-message, .validation-message').forEach((node) => node.remove());
 
-        const messageNode = field.parentElement.querySelector('.validation-message');
-        if (messageNode) {
-          messageNode.textContent = '';
-          messageNode.classList.add('hidden');
-        }
+      fields.forEach((field) => {
+        field.className = originalClasses.get(field);
+        field.removeAttribute('aria-invalid');
+        delete field.dataset.errorMessage;
+        delete field.dataset.successMessage;
       });
     }, 0);
   });
