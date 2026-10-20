@@ -28,6 +28,19 @@ Este repositorio es la **plantilla de inicio** para los proyectos transversales.
 5. **Empieza a implementar** en la carpeta correcta — no tires todo en la raíz.
 6. **Documenta** lo que añadas: cada app, servicio, agente o pipeline nuevo lleva subcarpeta + README.
 
+## Ejecutar el sitio del Hito 1
+
+Desde la raíz del proyecto, inicia el servidor estático:
+
+```bash
+npx http-server . -p 3000 -a 0.0.0.0
+```
+
+- Landing: `http://localhost:3000/`
+- Registro Brasa Points: `http://localhost:3000/application.html`
+
+En Codespaces, abre o reenvía el puerto 3000 para acceder desde el navegador.
+
 ---
 
 ## Cómo entender este monorepo
