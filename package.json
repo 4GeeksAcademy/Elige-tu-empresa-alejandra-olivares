@@ -1,0 +1,10 @@
+{
+  "name": "brasaland-hito-1",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i styles/tailwind.css -o styles/site.css --content index.html,application.html,validation.js --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

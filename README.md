@@ -30,6 +30,30 @@ This repository is the **starter template** for transversal projects. You will w
 
 ---
 
+## Run the Milestone 1 website
+
+From the repository root:
+
+```bash
+npx http-server . -p 3000 -a 0.0.0.0
+```
+
+Open `http://localhost:3000/` for the landing page or
+`http://localhost:3000/application.html` for registration. Forward port 3000 in
+Codespaces. The Spanish-only Tailwind site follows the unmodified
+[official milestone briefing](./BRIEFING.md). Registration is simulated: it
+neither sends nor stores personal data or emails. Eligibility starts on the
+18th birthday.
+
+Tailwind CSS is precompiled in `styles/site.css`, with no runtime CDN dependency.
+After changing HTML or JavaScript classes, run `npm ci` followed by
+`npm run build:css`. The optimized WebP logo preserves the original PNG.
+
+The registration form loads its single validation implementation from
+`validation.js` at the repository root.
+
+---
+
 ## How to think about this monorepo
 
 You are building **one company** across many milestones and projects. Each top-level folder has a **single responsibility** — like a real engineering team repo.
