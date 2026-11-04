@@ -41,6 +41,24 @@ npx http-server . -p 3000 -a 0.0.0.0
 
 En Codespaces, abre o reenvía el puerto 3000 para acceder desde el navegador.
 
+El [briefing oficial del Hito 1](./BRIEFING.md) se conserva íntegro como referencia
+de contenido, catálogos y mensajes. La experiencia está en español y usa Tailwind.
+El envío del formulario es simulado: no envía ni almacena datos ni correos.
+Se admiten registros desde el día en que se cumplen 18 años.
+
+El CSS de Tailwind ya está compilado en `styles/site.css`; no se usa el CDN
+en tiempo de ejecución. Si cambias clases en el HTML o JavaScript, regénéralo:
+
+```bash
+npm ci
+npm run build:css
+```
+
+El logo WebP es una versión reducida del PNG original, que se conserva intacto.
+
+El formulario carga una única implementación de validaciones en `validation.js`,
+en la raíz del repositorio.
+
 ---
 
 ## Cómo entender este monorepo
