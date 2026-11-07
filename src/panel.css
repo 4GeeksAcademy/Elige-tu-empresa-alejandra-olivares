@@ -1,0 +1,81 @@
+.operations-demo {
+  background-color: #1c1917;
+  color: #f5f5f4;
+}
+
+.operations-demo > header {
+  background-color: #0c0a09;
+}
+
+.operations-demo main > section {
+  border-color: rgb(255 255 255 / 12%);
+}
+
+.operations-demo h1,
+.operations-demo h2,
+.operations-demo h3 {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 900;
+}
+
+.operations-demo main section > .mb-6 > div > p,
+.operations-demo main section > .mb-6 > p {
+  color: #fcd34d;
+}
+
+.operations-demo #sales-filters {
+  border-color: rgb(255 255 255 / 14%);
+  border-radius: 0.875rem;
+  background-color: rgb(255 255 255 / 5%);
+  color: #f5f5f4;
+}
+
+.operations-demo #sales-filters input,
+.operations-demo #sales-filters select,
+.operations-demo #menu-category,
+.operations-demo #menu-currency,
+.operations-demo #menu-order,
+.operations-demo #location-order,
+.operations-demo #search-location-id,
+.operations-demo #search-menu-name,
+.operations-demo #search-capacity {
+  border-color: rgb(255 255 255 / 18%);
+  border-radius: 0.75rem;
+  background-color: #292524;
+  color: #fff;
+}
+
+.operations-demo #sales-filters button {
+  border-radius: 9999px;
+  background-color: #f59e0b;
+  color: #1c1917;
+}
+
+.operations-demo #search-location-form button,
+.operations-demo #search-menu-form button,
+.operations-demo #search-capacity-form button {
+  border-color: #f59e0b;
+  border-radius: 9999px;
+  background-color: transparent;
+  color: #fcd34d;
+}
+
+.operations-demo #daily-revenue,
+.operations-demo #average-ticket,
+.operations-demo #sales-count {
+  color: #1c1917;
+}
+
+.operations-demo #sales-notice,
+.operations-demo #reports-notice,
+.operations-demo #location-search-result,
+.operations-demo #menu-search-result,
+.operations-demo #capacity-search-result {
+  color: #d6d3d1;
+}
+
+.operations-demo > footer {
+  border-color: rgb(255 255 255 / 12%);
+  background-color: #0c0a09;
+  color: #a8a29e;
+}
