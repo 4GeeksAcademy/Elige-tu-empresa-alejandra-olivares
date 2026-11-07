@@ -8,12 +8,27 @@ import type {
   Country,
   CountryMetrics,
 } from "../types/models";
+import {
+  assertArrayOf,
+  assertDate,
+  assertFiniteNumber,
+  assertString,
+  assertValue,
+  isCurrency,
+  isLocation,
+  isMenuItem,
+  isSaleTransaction,
+  isWasteRecord,
+} from "./inputGuards";
 
 export function convertCurrency(
   amount: number,
   fromCurrency: "USD" | "COP",
   toCurrency: "USD" | "COP"
 ): number {
+  assertFiniteNumber(amount, "amount");
+  assertValue(fromCurrency, "fromCurrency", isCurrency);
+  assertValue(toCurrency, "toCurrency", isCurrency);
   const exchangeRate = 4000;
 
   if (fromCurrency === toCurrency) {
@@ -31,6 +46,9 @@ export function calculateWasteCost(
   locationId: string,
   currency: "USD" | "COP"
 ): number {
+  assertArrayOf(wasteRecords, "wasteRecords", isWasteRecord);
+  assertString(locationId, "locationId");
+  assertValue(currency, "currency", isCurrency);
   const totalCost = wasteRecords
     .filter((record) => record.locationId === locationId)
     .reduce((total, record) => total + record.cost[currency], 0);
@@ -42,6 +60,8 @@ export function calculateAverageTicket(
   sales: SaleTransaction[],
   currency: "USD" | "COP"
 ): number {
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertValue(currency, "currency", isCurrency);
   if (sales.length === 0) {
     return 0;
   }
@@ -57,6 +77,7 @@ export function calculateAverageTicket(
 export function countSalesByPaymentMethod(
   sales: SaleTransaction[]
 ): Record<PaymentMethod, number> {
+  assertArrayOf(sales, "sales", isSaleTransaction);
   return sales.reduce<Record<PaymentMethod, number>>(
     (counts, sale) => {
       counts[sale.paymentMethod] += 1;
@@ -74,6 +95,7 @@ export function countSalesByPaymentMethod(
 export function groupWasteByReason(
   wasteRecords: WasteRecord[]
 ): Record<WasteReason, WasteRecord[]> {
+  assertArrayOf(wasteRecords, "wasteRecords", isWasteRecord);
   return wasteRecords.reduce<Record<WasteReason, WasteRecord[]>>(
     (groups, record) => {
       groups[record.reason].push(record);
@@ -95,6 +117,9 @@ export function calculateDailyRevenue(
   date: Date,
   currency: "USD" | "COP"
 ): number {
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertDate(date, "date");
+  assertValue(currency, "currency", isCurrency);
   if (Number.isNaN(date.getTime())) {
     return 0;
   }
@@ -126,6 +151,10 @@ export function calculateLocationMargin(
   locationId: string,
   currency: "USD" | "COP"
 ): number {
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertArrayOf(menuItems, "menuItems", isMenuItem);
+  assertString(locationId, "locationId");
+  assertValue(currency, "currency", isCurrency);
   const locationSales = sales.filter((sale) => sale.locationId === locationId);
 
   if (locationSales.length === 0) {
@@ -164,6 +193,8 @@ export function findTopSellingItems(
   menuItems: MenuItem[],
   topN: number
 ): Array<{ item: MenuItem; totalSold: number }> {
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertArrayOf(menuItems, "menuItems", isMenuItem);
   if (sales.length === 0 || !Number.isInteger(topN) || topN <= 0) {
     return [];
   }
@@ -199,6 +230,9 @@ export function calculateCountryComparison(
   locations: Location[],
   menuItems: MenuItem[]
 ): { Colombia: CountryMetrics; USA: CountryMetrics } {
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertArrayOf(locations, "locations", isLocation);
+  assertArrayOf(menuItems, "menuItems", isMenuItem);
   // Keep menuItems in the signature for briefing compatibility; these metrics only use sales and locations.
   void menuItems;
 
@@ -276,6 +310,11 @@ export function scoreLocationPerformance(
   menuItems: MenuItem[],
   referenceDate: Date
 ): number {
+  assertValue(location, "location", isLocation);
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertArrayOf(wasteRecords, "wasteRecords", isWasteRecord);
+  assertArrayOf(menuItems, "menuItems", isMenuItem);
+  assertDate(referenceDate, "referenceDate");
   if (Number.isNaN(referenceDate.getTime())) {
     throw new Error("La fecha de referencia no es válida.");
   }
@@ -347,6 +386,11 @@ export function rankLocationsByPerformance(
   menuItems: MenuItem[],
   referenceDate: Date
 ): Array<{ location: Location; score: number }> {
+  assertArrayOf(locations, "locations", isLocation);
+  assertArrayOf(sales, "sales", isSaleTransaction);
+  assertArrayOf(wasteRecords, "wasteRecords", isWasteRecord);
+  assertArrayOf(menuItems, "menuItems", isMenuItem);
+  assertDate(referenceDate, "referenceDate");
   if (locations.length === 0) {
     return [];
   }

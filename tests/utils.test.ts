@@ -201,6 +201,7 @@ test("las búsquedas encuentran coincidencias y manejan ausentes y mayúsculas",
   const locations = [first, second, third];
   assert.equal(findLocationById(locations, "second"), second);
   assert.equal(findLocationById(locations, "missing"), null);
+  assert.equal(findLocationById([], "missing"), null);
 
   const item = makeMenuItem({ name: "Pollo Brasaland" });
   assert.equal(findMenuItemByName([item], "pOlLo bRaSaLaNd"), item);
@@ -208,6 +209,78 @@ test("las búsquedas encuentran coincidencias y manejan ausentes y mayúsculas",
 
   assert.equal(binarySearchLocationByCapacity(locations, 20), 1);
   assert.equal(binarySearchLocationByCapacity(locations, 25), -1);
+});
+
+test("las validaciones rechazan estructuras nulas, incompletas y campos mal tipados", () => {
+  const invalidMenuItems: unknown[] = [
+    null,
+    undefined,
+    {},
+    { ...makeMenuItem(), name: null },
+    { ...makeMenuItem(), basePrice: undefined },
+    { ...makeMenuItem(), basePrice: null },
+    { ...makeMenuItem(), ingredientCost: null },
+  ];
+  for (const item of invalidMenuItems) {
+    const result = validateMenuItem(item);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.length > 0);
+  }
+
+  const validSale = makeSale();
+  const invalidSales: unknown[] = [
+    null,
+    undefined,
+    {},
+    { ...validSale, waiterName: null },
+    { ...validSale, totalPrice: undefined },
+    { ...validSale, totalPrice: null },
+  ];
+  for (const sale of invalidSales) {
+    const result = validateSaleTransaction(sale);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.length > 0);
+  }
+
+  const validLocation = makeLocation();
+  const invalidLocations: unknown[] = [
+    null,
+    undefined,
+    {},
+    { ...validLocation, monthlyRentCost: undefined },
+    { ...validLocation, monthlyRentCost: null },
+    { ...validLocation, averageMonthlyUtilities: null },
+  ];
+  for (const location of invalidLocations) {
+    const result = validateLocation(location, 2025);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.length > 0);
+  }
+});
+
+test("las utilidades de colecciones rechazan arrays inválidos y elementos nulos descriptivamente", () => {
+  assert.throws(
+    // @ts-expect-error Deliberately invalid runtime input for guard coverage.
+    () => filterSalesByLocation(null, "location-1"),
+    /sales debe ser un arreglo/
+  );
+  assert.throws(
+    // @ts-expect-error This array intentionally violates the MenuItem contract.
+    () => sortMenuItemsByPrice([null], "USD", "asc"),
+    /items\[0\] no es un elemento válido/
+  );
+  assert.throws(
+    // @ts-expect-error This array intentionally violates the Location contract.
+    () => findLocationById([null], "missing"),
+    /locations\[0\] no es un elemento válido/
+  );
+  assert.throws(
+    // @ts-expect-error This array intentionally violates the SaleTransaction contract.
+    () => calculateAverageTicket([null], "USD"),
+    /sales\[0\] no es un elemento válido/
+  );
+  assert.deepEqual(filterSalesByLocation([], "location-1"), []);
+  assert.equal(findMenuItemByName([], "missing"), null);
 });
 
 test("convierte monedas en ambos sentidos y conserva valores de la misma moneda", () => {

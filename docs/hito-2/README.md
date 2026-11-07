@@ -29,6 +29,10 @@ npm test
 - El margen se limita al intervalo 0–100 y se redondea a dos decimales.
 - Cuando el ingreso total es cero, los puntajes de ingresos, desperdicio y margen son cero. El componente de eficiencia se calcula por separado según las transacciones y la capacidad.
 
+## Entradas inválidas
+
+`validateMenuItem`, `validateSaleTransaction` y `validateLocation` reciben `unknown`, comprueban la estructura antes de leer campos y acumulan errores descriptivos sin lanzar excepciones por datos incompletos. Las demás utilidades rechazan argumentos que no respetan el contrato de tipo y colecciones con elementos nulos o mal formados mediante un `Error` descriptivo. Los arrays vacíos y las búsquedas sin coincidencias conservan sus resultados habituales (`[]`, `0`, `null` o `-1`, según la operación).
+
 ## Referencias explícitas y pureza
 
 `validateLocation` requiere `currentYear`, y `scoreLocationPerformance` y `rankLocationsByPerformance` requieren `referenceDate`. Estos parámetros de referencia extienden las firmas descritas en el briefing para que las funciones no consulten el reloj y produzcan resultados reproducibles con los mismos argumentos. Las firmas no son idénticas a las originales del briefing.

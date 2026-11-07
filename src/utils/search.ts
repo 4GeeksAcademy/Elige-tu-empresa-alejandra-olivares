@@ -1,9 +1,18 @@
 import type { Location, MenuItem } from "../types/models";
+import {
+  assertArrayOf,
+  assertFiniteNumber,
+  assertString,
+  isLocation,
+  isMenuItem,
+} from "./inputGuards";
 
 export function findLocationById(
   locations: Location[],
   id: string
 ): Location | null {
+  assertArrayOf(locations, "locations", isLocation);
+  assertString(id, "id");
   for (const location of locations) {
     if (location.id === id) {
       return location;
@@ -17,6 +26,8 @@ export function findMenuItemByName(
   items: MenuItem[],
   name: string
 ): MenuItem | null {
+  assertArrayOf(items, "items", isMenuItem);
+  assertString(name, "name");
   const normalizedName = name.toLowerCase();
 
   for (const item of items) {
@@ -32,6 +43,8 @@ export function binarySearchLocationByCapacity(
   sortedLocations: Location[],
   targetCapacity: number
 ): number {
+  assertArrayOf(sortedLocations, "sortedLocations", isLocation);
+  assertFiniteNumber(targetCapacity, "targetCapacity");
   let left = 0;
   let right = sortedLocations.length - 1;
 
