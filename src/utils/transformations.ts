@@ -267,14 +267,14 @@ export function calculateCountryComparison(
 
 /**
  * Estima la apertura el 1 de enero UTC. Sin ingresos, los puntajes de ingresos, desperdicio y margen son 0.
- * referenceDate permite resultados reproducibles y, si se omite, usa la fecha actual.
+ * referenceDate es obligatorio para mantener resultados reproducibles.
  */
 export function scoreLocationPerformance(
   location: Location,
   sales: SaleTransaction[],
   wasteRecords: WasteRecord[],
   menuItems: MenuItem[],
-  referenceDate: Date = new Date()
+  referenceDate: Date
 ): number {
   if (Number.isNaN(referenceDate.getTime())) {
     throw new Error("La fecha de referencia no es válida.");
@@ -339,13 +339,13 @@ export function scoreLocationPerformance(
   return Math.round(Math.min(Math.max(totalScore, 0), 100) * 100) / 100;
 }
 
-/** La fecha opcional permite comparar sucursales con resultados reproducibles. */
+/** referenceDate es obligatorio para comparar sucursales de forma reproducible. */
 export function rankLocationsByPerformance(
   locations: Location[],
   sales: SaleTransaction[],
   wasteRecords: WasteRecord[],
   menuItems: MenuItem[],
-  referenceDate: Date = new Date()
+  referenceDate: Date
 ): Array<{ location: Location; score: number }> {
   if (locations.length === 0) {
     return [];

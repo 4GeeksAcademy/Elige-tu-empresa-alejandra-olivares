@@ -139,7 +139,11 @@ test("los filtros encuentran coincidencias, devuelven vacíos y admiten fechas l
     []
   );
   assert.deepEqual(
-    filterSalesByDateRange(sales, new Date("invalid"), new Date()),
+    filterSalesByDateRange(
+      sales,
+      new Date("invalid"),
+      new Date("2024-02-02T00:00:00.000Z")
+    ),
     []
   );
 
@@ -427,6 +431,18 @@ test("valida locaciones en los años límite y reúne errores numéricos", () =>
     false
   );
 
+  const stableLocation = makeLocation({ openingYear: 2020 });
+  assert.deepEqual(
+    validateLocation(stableLocation, 2025),
+    validateLocation(stableLocation, 2025)
+  );
+
+  for (const currentYear of [2007, 2025.5, Number.NaN, Number.POSITIVE_INFINITY]) {
+    const invalidYear = validateLocation(stableLocation, currentYear);
+    assert.equal(invalidYear.valid, false);
+    assert.ok(invalidYear.errors.some((error) => error.includes("año de referencia")));
+  }
+
   const invalid = validateLocation(
     makeLocation({
       openingYear: Number.POSITIVE_INFINITY,
@@ -488,9 +504,23 @@ test("calcula manualmente el puntaje con fecha fija y filtra datos por sucursal"
 
   // Revenue: 100 / 1000 * 40 = 4; efficiency: 2 / 10 * 30 = 6;
   // waste: 5% gives 10; margin: 80% / 10 gives 8. Total: 28.
+  const score = scoreLocationPerformance(
+    location,
+    sales,
+    wasteRecords,
+    [menuItem],
+    referenceDate
+  );
+  assert.equal(score, 28);
   assert.equal(
-    scoreLocationPerformance(location, sales, wasteRecords, [menuItem], referenceDate),
-    28
+    scoreLocationPerformance(
+      location,
+      sales,
+      wasteRecords,
+      [menuItem],
+      new Date(referenceDate.getTime())
+    ),
+    score
   );
 });
 
@@ -578,6 +608,10 @@ test("ordena el ranking con la misma fecha fija y conserva el arreglo original",
     id: "rank-item",
     ingredientCost: { USD: 100, COP: 400_000 },
   });
+  const wasteRecords = [
+    makeWaste({ locationId: "high", cost: { USD: 50, COP: 200_000 } }),
+  ];
+  const referenceDate = new Date("2024-01-11T00:00:00.000Z");
   const sales = [
     makeSale({
       id: "rank-sale-1",
@@ -595,9 +629,9 @@ test("ordena el ranking con la misma fecha fija y conserva el arreglo original",
   const ranking = rankLocationsByPerformance(
     locations,
     sales,
-    [makeWaste({ locationId: "high", cost: { USD: 50, COP: 200_000 } })],
+    wasteRecords,
     [item],
-    new Date("2024-01-11T00:00:00.000Z")
+    referenceDate
   );
 
   assert.deepEqual(
@@ -610,6 +644,25 @@ test("ordena el ranking con la misma fecha fija y conserva el arreglo original",
       { id: "low", score: 0 },
     ]
   );
+  assert.deepEqual(
+    rankLocationsByPerformance(
+      locations,
+      sales,
+      wasteRecords,
+      [item],
+      new Date(referenceDate.getTime())
+    ),
+    ranking
+  );
   assert.deepEqual(locations, originalLocations);
-  assert.deepEqual(rankLocationsByPerformance([], [], [], [], new Date()), []);
+  assert.deepEqual(
+    rankLocationsByPerformance(
+      [],
+      [],
+      [],
+      [],
+      new Date("2024-01-11T00:00:00.000Z")
+    ),
+    []
+  );
 });

@@ -29,9 +29,11 @@ npm test
 - El margen se limita al intervalo 0–100 y se redondea a dos decimales.
 - Cuando el ingreso total es cero, los puntajes de ingresos, desperdicio y margen son cero. El componente de eficiencia se calcula por separado según las transacciones y la capacidad.
 
-## Limitaciones
+## Referencias explícitas y pureza
 
-`validateLocation`, `scoreLocationPerformance` y `rankLocationsByPerformance` consultan el reloj cuando se omite su año o fecha opcional. Al proporcionar una referencia explícita, sus cálculos son reproducibles; sin ella, las llamadas no cumplen estrictamente la pureza solicitada.
+`validateLocation` requiere `currentYear`, y `scoreLocationPerformance` y `rankLocationsByPerformance` requieren `referenceDate`. Estos parámetros de referencia extienden las firmas descritas en el briefing para que las funciones no consulten el reloj y produzcan resultados reproducibles con los mismos argumentos. Las firmas no son idénticas a las originales del briefing.
+
+El panel y las pruebas pasan referencias explícitas. Los datos de demostración conservan una fecha fija, evitando depender del día en que se ejecuta la aplicación.
 
 Este documento describe decisiones y cobertura actuales; no afirma que todos los requisitos del briefing estén completados.
 

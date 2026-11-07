@@ -82,17 +82,21 @@ export function validateSaleTransaction(
   };
 }
 
-/** Uses the current UTC year when currentYear is omitted. */
 export function validateLocation(
   location: Location,
-  currentYear: number = new Date().getUTCFullYear()
+  currentYear: number
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
+  const isValidCurrentYear = Number.isInteger(currentYear) && currentYear >= 2008;
+
+  if (!isValidCurrentYear) {
+    errors.push("El año de referencia debe ser un entero válido mayor o igual que 2008.");
+  }
 
   if (
     !Number.isFinite(location.openingYear) ||
     location.openingYear < 2008 ||
-    location.openingYear > currentYear
+    (isValidCurrentYear && location.openingYear > currentYear)
   ) {
     errors.push(
       `El año de apertura debe ser un número finito entre 2008 y ${currentYear}, inclusive.`
