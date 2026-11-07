@@ -34,3 +34,7 @@ npm test
 `validateLocation`, `scoreLocationPerformance` y `rankLocationsByPerformance` consultan el reloj cuando se omite su año o fecha opcional. Al proporcionar una referencia explícita, sus cálculos son reproducibles; sin ella, las llamadas no cumplen estrictamente la pureza solicitada.
 
 Este documento describe decisiones y cobertura actuales; no afirma que todos los requisitos del briefing estén completados.
+
+## Panel interactivo
+
+Ejecuta `npm run demo` para servir en un mismo origen la landing (`/`), el formulario (`/application.html`) y el panel (`/demo/`). Para compilar las tres páginas, usa `npm run build:demo`; los archivos quedan en `dist/` y el panel en `dist/demo/`.

@@ -4,12 +4,16 @@
   "scripts": {
     "test": "tsx --test tests/*.test.ts",
     "build:css": "tailwindcss -i styles/tailwind.css -o styles/site.css --content index.html,application.html,validation.js --minify",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "demo": "npm run build:css && npm run build:demo:css && vite --host 0.0.0.0",
+    "build:demo:css": "tailwindcss --config tailwind.demo.config.cjs -i styles/tailwind.css -o styles/demo.css --minify",
+    "build:demo": "npm run build:css && npm run build:demo:css && vite build"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "tailwindcss": "3.4.17",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
   }
 }
